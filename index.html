@@ -31,17 +31,30 @@ let data = [];
 fetch("data.csv")
   .then(response => response.text())
   .then(text => {
-    const rows = text.trim().split("\n").map(r => r.split(","));
-    const headers = rows.shift();
+//     const rows = text.trim().split("\n").map(r => r.split(","));
+//     const headers = rows.shift();
+// 
+//     data = rows.map(row => {
+//       let obj = {};
+//       headers.forEach((h, i) => {
+//         obj[h.trim()] = (row[i] || "").trim(); // 全部文字列扱い
+//       });
+//       return obj;
+//     });
+// 追加部分ここから
+      const rows = text.trim().split("\n").map(r => r.split(","));
+let headers = rows.shift().map(h => h.trim().replace(/\r/g, ""));
 
-    data = rows.map(row => {
-      let obj = {};
-      headers.forEach((h, i) => {
-        obj[h.trim()] = (row[i] || "").trim(); // 全部文字列扱い
-      });
-      return obj;
-    });
+data = rows.map(row => {
+  let obj = {};
+  headers.forEach((h, i) => {
+    obj[h] = (row[i] || "").trim();
+  });
+  return obj;
+});
 
+    console.log(data);
+// ここまで
     initMaker();
   });
 
@@ -121,4 +134,5 @@ document.getElementById("model").addEventListener("change", e => {
 
 </body>
 </html>
+
 
