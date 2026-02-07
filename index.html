@@ -28,7 +28,7 @@ select { margin: 5px 0; padding: 5px; width: 200px; }
 <script>
 let data = [];
 
-fetch("替刃リスト.csv")
+fetch("data.csv")
   .then(response => response.text())
   .then(text => {
     const rows = text.trim().split("\n").map(r => r.split(","));
@@ -121,3 +121,4 @@ document.getElementById("model").addEventListener("change", e => {
 
 </body>
 </html>
+
