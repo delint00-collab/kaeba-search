@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>替刃検索</title>
 
-// 変更前ここから
+//  変更前ここから
 //
 // <style>
 // body { font-family: sans-serif; padding: 20px; }
@@ -13,8 +13,8 @@
 // .item { margin-bottom: 10px; padding: 5px; border-bottom: 1px solid #eee; }
 // </style>
 
-// ここまで
-// 追加分ここから
+//  ここまで
+//  追加分ここから
 
 <style>
 body {
@@ -57,7 +57,7 @@ select {
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-// ここまで
+//  ここまで
   
 </head>
 <body>
@@ -87,11 +87,11 @@ fetch("data.csv")
 //     data = rows.map(row => {
 //       let obj = {};
 //       headers.forEach((h, i) => {
-//         obj[h.trim()] = (row[i] || "").trim(); // 全部文字列扱い
+//         obj[h.trim()] = (row[i] || "").trim();  全部文字列扱い
 //       });
 //       return obj;
 //     });
-// 追加部分ここから
+//  追加部分ここから
       const rows = text.trim().split("\n").map(r => r.split(","));
 let headers = rows.shift().map(h => h.trim().replace(/\r/g, ""));
 
@@ -104,7 +104,7 @@ data = rows.map(row => {
 });
 
     console.log(data);
-// ここまで
+//  ここまで
     initMaker();
   });
 
@@ -199,6 +199,7 @@ document.getElementById("model").addEventListener("change", e => {
 
 </body>
 </html>
+
 
 
 
