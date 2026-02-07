@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>替刃検索</title>
+<style>
+body { font-family: sans-serif; padding: 20px; }
+select { margin: 5px 0; padding: 5px; width: 200px; }
+.result { margin-top: 20px; padding: 10px; border: 1px solid #ccc; }
+.item { margin-bottom: 10px; padding: 5px; border-bottom: 1px solid #eee; }
+</style>
+</head>
+<body>
+
+<h2>替刃検索</h2>
+
+<label>メーカー</label><br>
+<select id="maker"><option value="">選択してください</option></select><br>
+
+<label>サイズ</label><br>
+<select id="size"><option value="">選択してください</option></select><br>
+
+<label>機種</label><br>
+<select id="model"><option value="">選択してください</option></select><br>
+
+<div class="result" id="result"></div>
+
+<script>
+let data = [];
+
+fetch("替刃リスト.csv")
+  .then(response => response.text())
+  .then(text => {
+    const rows = text.trim().split("\n").map(r => r.split(","));
+    const headers = rows.shift();
+
+    data = rows.map(row => {
+      let obj = {};
+      headers.forEach((h, i) => {
+        obj[h.trim()] = (row[i] || "").trim(); // 全部文字列扱い
+      });
+      return obj;
+    });
+
+    initMaker();
+  });
+
+function uniqueValues(key, filter = {}) {
+  return [...new Set(
+    data
+      .filter(row => {
+        return Object.keys(filter).every(f => row[f] === filter[f]);
+      })
+      .map(row => row[key])
+      .filter(v => v !== "")
+  )];
+}
+
+function fillSelect(selectId, values) {
+  const select = document.getElementById(selectId);
+  select.innerHTML = '<option value="">選択してください</option>';
+  values.forEach(v => {
+    const opt = document.createElement("option");
+    opt.value = v;
+    opt.textContent = v;
+    select.appendChild(opt);
+  });
+}
+
+function initMaker() {
+  fillSelect("maker", uniqueValues("メーカー"));
+}
+
+document.getElementById("maker").addEventListener("change", e => {
+  const maker = e.target.value;
+  fillSelect("size", uniqueValues("サイズ", { "メーカー": maker }));
+  fillSelect("model", []);
+  document.getElementById("result").innerHTML = "";
+});
+
+document.getElementById("size").addEventListener("change", e => {
+  const maker = document.getElementById("maker").value;
+  const size = e.target.value;
+  fillSelect("model", uniqueValues("機種", {
+    "メーカー": maker,
+    "サイズ": size
+  }));
+  document.getElementById("result").innerHTML = "";
+});
+
+document.getElementById("model").addEventListener("change", e => {
+  const maker = document.getElementById("maker").value;
+  const size = document.getElementById("size").value;
+  const model = e.target.value;
+
+  const results = data.filter(row =>
+    row["メーカー"] === maker &&
+    row["サイズ"] === size &&
+    row["機種"] === model
+  );
+
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = "";
+
+  results.forEach(r => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.innerHTML = `
+      <strong>型番:</strong> ${r["型番"]}<br>
+      <strong>説明:</strong> ${r["替刃説明"]}<br>
+      <strong>取扱:</strong> ${r["取扱"]}
+    `;
+    resultDiv.appendChild(div);
+  });
+
+  if (results.length === 0) {
+    resultDiv.innerHTML = "該当なし";
+  }
+});
+</script>
+
+</body>
+</html>
