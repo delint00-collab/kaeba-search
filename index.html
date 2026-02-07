@@ -58,7 +58,20 @@ data = rows.map(row => {
     initMaker();
   });
 
-function uniqueValues(key, filter = {}) {
+// 変更元
+//  function uniqueValues(key, filter = {}) {
+//  return [...new Set(
+//    data
+//      .filter(row => {
+//        return Object.keys(filter).every(f => row[f] === filter[f]);
+//      })
+//      .map(row => row[key])
+//      .filter(v => v !== "")
+//  )];
+// }
+
+// 変更後ここから  
+  function uniqueValues(key, filter = {}) {
   return [...new Set(
     data
       .filter(row => {
@@ -66,9 +79,11 @@ function uniqueValues(key, filter = {}) {
       })
       .map(row => row[key])
       .filter(v => v !== "")
-  )];
+  )].sort((a, b) =>
+    a.localeCompare(b, undefined, { numeric: true })
+  );
 }
-
+// ここまで  
 function fillSelect(selectId, values) {
   const select = document.getElementById(selectId);
   select.innerHTML = '<option value="">選択してください</option>';
@@ -134,5 +149,6 @@ document.getElementById("model").addEventListener("change", e => {
 
 </body>
 </html>
+
 
 
