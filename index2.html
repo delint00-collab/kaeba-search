@@ -193,6 +193,7 @@ document.getElementById("model").addEventListener("change", e => {
     div.className = "item";
     div.innerHTML = `
       <strong>型番:</strong> ${r["型番"]}<br>
+      <strong>替刃サイズ:</strong> ${r["替刃サイズ"] || "未登録"}<br>
       <strong>説明:</strong> ${r["替刃説明"]}<br>
       <strong>取扱:</strong> ${r["取扱"]}
     `;
